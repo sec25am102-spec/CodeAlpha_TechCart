@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Shopping Cart - TechCart</title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f4f4f4;
+            color: #111;
+        }
+
+        .navbar {
+            background: #1f2937;
+            color: white;
+            padding: 25px 50px;
+
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 30px;
+            font-weight: bold;
+        }
+
+        .cart-title {
+            font-size: 18px;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 900px;
+            margin: 50px auto;
+        }
+
+        h1 {
+            text-align: center;
+            font-size: 36px;
+            margin-bottom: 35px;
+        }
+
+        .cart-item {
+            background: white;
+            padding: 20px;
+            margin-bottom: 15px;
+
+            border-radius: 12px;
+
+            box-shadow:
+                0 3px 12px rgba(0, 0, 0, 0.08);
+
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .product-name {
+            font-size: 20px;
+            font-weight: bold;
+        }
+
+        .quantity {
+            margin-top: 5px;
+            color: #555;
+        }
+
+        .price {
+            font-size: 18px;
+            font-weight: bold;
+            color: #2563eb;
+        }
+
+        .quantity-buttons {
+            margin-top: 8px;
+        }
+
+        .quantity-buttons a {
+            display: inline-block;
+            text-decoration: none;
+            color: white;
+
+            padding: 6px 12px;
+
+            border-radius: 5px;
+
+            font-weight: bold;
+
+            margin-right: 5px;
+        }
+
+        .decrease {
+            background: #dc3545;
+        }
+
+        .increase {
+            background: #16a34a;
+        }
+
+        .empty {
+            background: white;
+            padding: 40px;
+            text-align: center;
+            border-radius: 12px;
+        }
+
+        .summary {
+            background: white;
+
+            margin-top: 25px;
+
+            padding: 30px;
+
+            border-radius: 12px;
+
+            text-align: right;
+
+            box-shadow:
+                0 3px 12px rgba(0, 0, 0, 0.08);
+        }
+
+        .total {
+            font-size: 30px;
+            font-weight: bold;
+            margin-bottom: 25px;
+        }
+
+        .buttons {
+            display: flex;
+            justify-content: flex-end;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            display: inline-block;
+
+            padding: 14px 25px;
+
+            border-radius: 7px;
+
+            text-decoration: none;
+
+            font-size: 16px;
+
+            font-weight: bold;
+        }
+
+        .continue {
+            background: #2563eb;
+            color: white;
+        }
+
+        .checkout {
+            background: #16a34a;
+            color: white;
+        }
+
+        .continue:hover {
+            background: #1d4ed8;
+        }
+
+        .checkout:hover {
+            background: #15803d;
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+    <!-- NAVBAR -->
+
+    <div class="navbar">
+
+        <div class="logo">
+            🛒 TechCart
+        </div>
+
+        <div class="cart-title">
+            🛍️ Shopping Cart
+        </div>
+
+    </div>
+
+
+    <!-- MAIN CONTAINER -->
+
+    <div class="container">
+
+
+        <h1>
+            Your Shopping Cart
+        </h1>
+
+
+        {% if products %}
+
+
+            <!-- CART PRODUCTS -->
+
+            {% for item in products %}
+
+                <div class="cart-item">
+
+
+                    <div>
+
+                        <div class="product-name">
+                            {{ item.product.name }}
+                        </div>
+
+
+                        <div class="quantity">
+
+                            Quantity:
+                            {{ item.quantity }}
+
+                        </div>
+
+
+                        <!-- QUANTITY BUTTONS -->
+
+                        <div class="quantity-buttons">
+
+                            <a
+                                href="{% url 'decrease_quantity' item.product.id %}"
+                                class="decrease">
+                                −
+                            </a>
+
+
+                            <span>
+                                {{ item.quantity }}
+                            </span>
+
+
+                            <a
+                                href="{% url 'increase_quantity' item.product.id %}"
+                                class="increase">
+                                +
+                            </a>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="price">
+
+                        ₹{{ item.total }}
+
+                    </div>
+
+
+                </div>
+
+            {% endfor %}
+
+
+            <!-- CART SUMMARY -->
+
+            <div class="summary">
+
+
+                <div class="total">
+
+                    Total:
+                    ₹{{ grand_total }}
+
+                </div>
+
+
+                <div class="buttons">
+
+
+                    <!-- CONTINUE SHOPPING -->
+
+                    <a
+                        href="{% url 'home' %}"
+                        class="btn continue">
+
+                        Continue Shopping
+
+                    </a>
+
+
+                    <!-- CHECKOUT -->
+
+                    <a
+                        href="{% url 'checkout' %}"
+                        class="btn checkout">
+
+                        Proceed to Checkout →
+
+                    </a>
+
+
+                </div>
+
+
+            </div>
+
+
+        {% else %}
+
+
+            <!-- EMPTY CART -->
+
+            <div class="empty">
+
+                <h2>
+                    Your cart is empty 🛒
+                </h2>
+
+                <p>
+                    Add some products to your cart first.
+                </p>
+
+
+                <a
+                    href="{% url 'home' %}"
+                    class="btn continue">
+
+                    Start Shopping
+
+                </a>
+
+            </div>
+
+
+        {% endif %}
+
+
+    </div>
+
+
+</body>
+
+</html>
